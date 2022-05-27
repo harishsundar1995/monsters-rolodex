@@ -7,6 +7,8 @@ import './App.css'
 const App = () => {
     const [monsters, setMonsters] = useState([])
     const [searchField, setSearchField] = useState('')
+    const [filteredMonsters, setFilteredMonsters] = useState(monsters)
+
     const onSearchChange = (e) => {
         const searchFieldValue = e.target.value.toLowerCase()
         setSearchField(searchFieldValue)
@@ -16,7 +18,11 @@ const App = () => {
         fetch('https://jsonplaceholder.typicode.com/users').then((response) => response.json()).then((users) => setMonsters(users))
     }, [])
 
-    const filteredMonsters = monsters.filter((monster) => { return monster.name.toLowerCase().includes(searchField) })
+    useEffect(() => {
+        const newFilteredMonsters = monsters.filter((monster) => { return monster.name.toLowerCase().includes(searchField) })
+        setFilteredMonsters(newFilteredMonsters)
+    }, [monsters, searchField])
+
 
     return (
         <div className='m-2 text-center'>
